@@ -47,3 +47,4 @@ buck-out/
 dist
 .ionide/
 *.tgz
+yarn.lock

@@ -1,7 +1,7 @@
 {
   "name": "react-native-fast-animations",
   "version": "0.0.1",
-  "description": "Yet another react-native package",
+  "description": "React Native animations via Core Animation or RenderThread API",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "keywords": [
@@ -10,30 +10,21 @@
   "author": "ex3ndr",
   "license": "MIT",
   "scripts": {
-    "init:package": "cd example && npm i && npm run install:pods",
+    "postinstall": "cd example && yarn",
     "build": "rm -rf dist && tsc -p ./src",
-    "watch": "npm run build -- -w",
-    "lint": "npm run lint:ts && npm run lint:kotlin && npm run lint:swift",
-    "lint:ts": "tslint --fix -p ./src && tslint --fix -p ./example/src",
-    "lint:kotlin": "cd example/android && ./gradlew ktlintMainSourceSetFormat",
-    "lint:swift": "cd ios && ../example/ios/Pods/SwiftLint/swiftlint autocorrect && ../example/ios/Pods/SwiftLint/swiftlint",
-    "ci:build": "cd example && npm i",
-    "ci:lint": "npm run ci:lint:ts && npm run ci:lint:kotlin && npm run ci:lint:swift",
-    "ci:lint:ts": "tslint -p ./src && tslint -p ./example/src",
-    "ci:lint:kotlin": "cd example/android && ./gradlew ktlintMainSourceSetCheck",
-    "ci:lint:swift": "cd ios && ../example/ios/Pods/SwiftLint/swiftlint",
-    "ci:compile:android": "cd example/android && ./gradlew compileDebugSources",
-    "ci:compile:ios": "cd example/ios && export RCT_NO_LAUNCH_PACKAGER=\"true\" && export RCT_NO_BUNDLE=\"true\" && xcodebuild CODE_SIGN_IDENTITY=\"\" CODE_SIGNING_REQUIRED=\"NO\" CODE_SIGN_ENTITLEMENTS=\"\" CODE_SIGNING_ALLOWED=\"NO\" -workspace ReactNativeFastAnimationsExample.xcworkspace -configuration Debug -scheme ReactNativeFastAnimationsExample test",
-    "preversion": "npm run lint && npm run build",
-    "postversion": "git push && git push --tags"
+    "dev": "yarn build && yarn dev:pods && concurrently --kill-others 'yarn dev:lib' 'yarn dev:example' 'yarn dev:bundler'",
+    "dev:lib": "tsc -p ./src -w",
+    "dev:example": "cd example && rm -rf build && ../node_modules/.bin/tsc -w",
+    "dev:bundler": "cd example && yarn react-native start",
+    "dev:pods": "cd example/ios && pod install"
   },
   "bugs": {
-    "url": "https://github.com/ex3ndr/react-native-fast-animations/issues"
+    "url": "https://github.com/openland/react-native-fast-animations/issues"
   },
-  "homepage": "https://github.com/ex3ndr/react-native-fast-animations#readme",
+  "homepage": "https://github.com/openland/react-native-fast-animations#readme",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/ex3ndr/react-native-fast-animations.git"
+    "url": "git+https://github.com/openland/react-native-fast-animations.git"
   },
   "peerDependencies": {
     "@babel/runtime": "*",
@@ -59,5 +50,8 @@
     "*.md",
     "*.podspec",
     "LICENSE"
-  ]
+  ],
+  "dependencies": {
+    "concurrently": "^5.1.0"
+  }
 }

@@ -8,4 +8,8 @@
 #import <React/RCTViewManager.h>
 #import <React/RCTDevLoadingView.h>
 
+#import <React/RCTView.h>
+#import <React/RCTViewManager.h>
+#import <React/RCTEventEmitter.h>
+
 #endif /* RNFAReactNativeFastAnimationsUmbrella_h */

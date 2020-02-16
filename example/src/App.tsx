@@ -1,5 +1,5 @@
 import React from 'react'
-import { View, StyleSheet } from 'react-native'
+import { View, StyleSheet, SafeAreaView } from 'react-native'
 import {
   FastAnimations
 } from 'react-native-fast-animations'
@@ -21,12 +21,14 @@ class App extends React.Component<{}> {
 
   render() {
     return (
-      <View style={styles.container}>
-        <FastAnimations
-          style={styles.component}
-          color={'#1ca57c'}
-        />
-      </View>
+      <SafeAreaView>
+        <View style={styles.container}>
+          <FastAnimations
+            style={styles.component}
+            color={'blue'}
+          />
+        </View>
+      </SafeAreaView>
     )
   }
 }
