@@ -27,9 +27,9 @@ target 'ReactNativeFastAnimationsExample' do
   pod 'glog', :podspec => '../node_modules/react-native/third-party-podspecs/glog.podspec'
   pod 'Folly', :podspec => '../node_modules/react-native/third-party-podspecs/Folly.podspec'
 
-  pod 'react-native-fast-animations', :path => '../../'
+  pod 'SwiftyJSON', '~> 4.0'
 
-  pod 'SwiftLint'
+  pod 'react-native-fast-animations', :path => '../../'
 
   use_native_modules!
 end

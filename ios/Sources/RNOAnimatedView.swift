@@ -8,9 +8,9 @@
 
 import Foundation
 
-class RNSAnimatedView: RCTView {
+class RNOAnimatedView: RCTView {
   
-  private weak var manager: RNSAnimatedViewManager!
+  private weak var manager: RNOAnimatedViewManager!
   private var animatedKeyValue: String!
   private var isRegistered = false
   var sourceSize = CGSize.zero
@@ -21,7 +21,7 @@ class RNSAnimatedView: RCTView {
   var currentWidthDelta: CGFloat = 0.0
   var currentHeightDelta: CGFloat = 0.0
   
-  init(manager: RNSAnimatedViewManager) {
+  init(manager: RNOAnimatedViewManager) {
     self.manager = manager
     super.init(frame: CGRect.zero)
   }

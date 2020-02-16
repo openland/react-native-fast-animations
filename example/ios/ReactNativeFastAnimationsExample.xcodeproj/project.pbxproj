@@ -155,7 +155,6 @@
 			buildConfigurationList = 13B07F931A680F5B00A75B9A /* Build configuration list for PBXNativeTarget "ReactNativeFastAnimationsExample" */;
 			buildPhases = (
 				D3CB71195262D37D55DD4089 /* [CP] Check Pods Manifest.lock */,
-				749E78DD2307102F001C5089 /* SwiftLint */,
 				FD10A7F022414F080027D42C /* Start Packager */,
 				13B07F871A680F5B00A75B9A /* Sources */,
 				13B07F8C1A680F5B00A75B9A /* Frameworks */,
@@ -264,24 +263,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "if [ -z \"${RCT_NO_BUNDLE+xxx}\" ] ; then\n  export NODE_BINARY=node\n  ../node_modules/react-native/scripts/react-native-xcode.sh\nfi\n";
-		};
-		749E78DD2307102F001C5089 /* SwiftLint */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-			);
-			name = SwiftLint;
-			outputFileListPaths = (
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "cd ../../ios && \"${PODS_ROOT}/SwiftLint/swiftlint\"\n";
 		};
 		D3CB71195262D37D55DD4089 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
