@@ -1,6 +1,6 @@
 {
   "name": "react-native-fast-animations",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "React Native animations via Core Animation or RenderThread API",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -10,9 +10,8 @@
   "author": "ex3ndr",
   "license": "MIT",
   "scripts": {
-    "postinstall": "cd example && yarn",
     "build": "rm -rf dist && tsc -p ./src",
-    "dev": "yarn build && yarn dev:pods && concurrently --kill-others 'yarn dev:lib' 'yarn dev:example' 'yarn dev:bundler'",
+    "dev": "cd example && yarn && cd .. && yarn build && yarn dev:pods && concurrently --kill-others 'yarn dev:lib' 'yarn dev:example' 'yarn dev:bundler'",
     "dev:lib": "tsc -p ./src -w",
     "dev:example": "cd example && rm -rf build && ../node_modules/.bin/tsc -w",
     "dev:bundler": "cd example && yarn react-native start",
@@ -49,9 +48,6 @@
     "ios",
     "src",
     "dist",
-    "example",
-    ".dockerignore",
-    ".editorconfig",
     "tslint.json",
     "*.md",
     "*.podspec",
