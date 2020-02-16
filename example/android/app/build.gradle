@@ -198,7 +198,8 @@ android {
 
 dependencies {
     implementation fileTree(dir: "libs", include: ["*.jar"])
-    implementation "com.facebook.react:react-native:+"  // From node_modules
+    implementation "com.facebook.react:react-native:+"
+    compile project(path: ':fast-animations')  // From node_modules
 
     if (enableHermes) {
       def hermesPath = "../../node_modules/hermesvm/android/";

@@ -39,4 +39,5 @@ android {
 dependencies {
     compileOnly "com.facebook.react:react-native:${_reactNativeVersion}"
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:${_kotlinVersion}"
+    implementation 'com.beust:klaxon:3.0.1'
 }
