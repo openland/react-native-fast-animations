@@ -1,6 +1,7 @@
 export {
     SAnimated,
     SAnimatedPropertyName,
+    SAnimatedPropertyValue,
     SAnimatedPropertyAnimator,
     SAnimatedEasing,
     SAnimatedTimingConfig,

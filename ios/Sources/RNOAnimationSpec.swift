@@ -28,8 +28,24 @@ class RNOAnimationTransactionSpec {
         aspec.type = RNOAnimationType(rawValue: anim["type"].stringValue)!
         aspec.viewKey = anim["view"].string!
         aspec.property = anim["prop"].string!
-        aspec.to = CGFloat(anim["to"].double!)
-        aspec.from = CGFloat(anim["from"].double!)
+        aspec.to = CGFloat(0)
+        aspec.from = CGFloat(0)
+
+        if let to = anim["to"].double {
+          aspec.to = CGFloat(to)
+        }
+
+        if let from = anim["from"].double {
+          aspec.from = CGFloat(from)
+        }
+
+        if let toColor = anim["toColor"].uInt64 {
+          aspec.toColor = resolveColorR(toColor)
+        }
+
+        if let fromColor = anim["fromColor"].uInt64 {
+          aspec.fromColor = resolveColorR(fromColor)
+        }
         
         // Duration
         if let duration = anim["duration"].double {
@@ -57,8 +73,15 @@ class RNOAnimationTransactionSpec {
         let aspec = RNOValueSetSpec()
         aspec.viewKey = s["view"].string!
         aspec.property = s["prop"].string!
-        aspec.value = CGFloat(s["to"].double!)
-        
+
+        if let to = s["to"].double {
+          aspec.value = CGFloat(to)
+        }
+
+        if let toColor = s["toColor"].uInt64 {
+          aspec.valueColor = resolveColorR(toColor)
+        }
+
         // Can we ignore this animation if view is missing?
         if let optional = s["optional"].bool {
           aspec.optional = optional
@@ -85,6 +108,7 @@ class RNOValueSetSpec {
   var viewKey: String!
   var property: String!
   var value: CGFloat!
+  var valueColor: UIColor?
   var optional: Bool = false
 }
 
@@ -94,6 +118,8 @@ class RNOAnimationSpec {
   var property: String!
   var to: CGFloat!
   var from: CGFloat!
+  var toColor: UIColor?
+  var fromColor: UIColor?
   var velocity: CGFloat?
   
   var duration: Double?

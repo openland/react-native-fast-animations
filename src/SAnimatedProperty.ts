@@ -1,15 +1,15 @@
-import { SAnimatedPropertyName, SAnimated } from './SAnimated';
+import { SAnimatedPropertyName, SAnimatedPropertyValue, SAnimated } from './SAnimated';
 import { Animated } from 'react-native';
 
 export class SAnimatedProperty {
     readonly name: string;
     readonly property: SAnimatedPropertyName;
-    private _value: number;
+    private _value: SAnimatedPropertyValue;
 
-    get value(): number {
+    get value(): SAnimatedPropertyValue {
         return this._value;
     }
-    set value(newValue: number) {
+    set value(newValue: SAnimatedPropertyValue) {
         let oldValue = this._value;
         this._value = newValue;
         SAnimated.onPropertyChanged(this, oldValue);
@@ -23,7 +23,7 @@ export class SAnimatedProperty {
         SAnimated.stopDynamic(this.name, this.property);
     }
 
-    constructor(name: string, property: SAnimatedPropertyName, value: number) {
+    constructor(name: string, property: SAnimatedPropertyName, value: SAnimatedPropertyValue) {
         this.name = name;
         this.property = property;
         this._value = value;

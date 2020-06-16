@@ -20,6 +20,7 @@ class RNOAnimatedView: RCTView {
   var currentTranslateY: CGFloat = 0.0
   var currentWidthDelta: CGFloat = 0.0
   var currentHeightDelta: CGFloat = 0.0
+  var currentBackgroundColor: UIColor = UIColor.clear
   
   init(manager: RNOAnimatedViewManager) {
     self.manager = manager

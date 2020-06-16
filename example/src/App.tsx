@@ -46,6 +46,33 @@ const OpacityAnimation = React.memo(() => {
   );
 });
 
+const BackgroundColorAnimation = React.memo(() => {
+  const name = React.useMemo(() => uuid(), []);
+  return (
+    <View style={{ flexDirection: 'column', paddingHorizontal: 16, paddingBottom: 8 }}>
+      <View style={{ flexDirection: 'row' }}>
+        <Button
+          title="Red -> Blue"
+          onPress={() => {
+            SAnimated.beginTransaction();
+            SAnimated.timing(name, { property: 'backgroundColor', from: '#ff0000', to: '#0000ff' });
+            SAnimated.commitTransaction();
+          }}
+        />
+        <Button
+          title="Blue -> Red"
+          onPress={() => {
+            SAnimated.beginTransaction();
+            SAnimated.timing(name, { property: 'backgroundColor', from: '#0000ff', to: '#ff0000' });
+            SAnimated.commitTransaction();
+          }}
+        />
+      </View>
+      <SAnimatedView name={name} style={{ backgroundColor: '#ff0000', width: 100, height: 100 }} />
+    </View>
+  );
+});
+
 const ContiniousAnimation = React.memo(() => {
   const name = React.useMemo(() => uuid(), []);
   const shadowView = React.useMemo(() => new SAnimatedShadowView(name), []);
@@ -173,6 +200,7 @@ class App extends React.Component<{}> {
           <View style={{ flexGrow: 1, flexDirection: 'column' }}>
             <Text style={{ height: 40, justifyContent: 'center', fontSize: 18, paddingHorizontal: 16, marginTop: 8 }}>Simple Animations</Text>
             <OpacityAnimation />
+            <BackgroundColorAnimation />
             <Text style={{ height: 40, justifyContent: 'center', fontSize: 18, paddingHorizontal: 16, marginTop: 32 }}>Continous Animations</Text>
             <ContiniousAnimation />
             <Text style={{ height: 40, justifyContent: 'center', fontSize: 18, paddingHorizontal: 16, marginTop: 32 }}>Transactions</Text>

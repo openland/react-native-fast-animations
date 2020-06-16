@@ -1,5 +1,5 @@
 import { SAnimatedView } from './SAnimatedView';
-import { NativeModules, NativeEventEmitter, Platform, DeviceEventEmitter, Animated } from 'react-native';
+import { NativeModules, NativeEventEmitter, Platform, DeviceEventEmitter, Animated, processColor } from 'react-native';
 import { SAnimatedProperty } from './SAnimatedProperty';
 import uuid from 'uuid/v4';
 
@@ -9,8 +9,9 @@ const RNOAnimatedViewManager = NativeModules.RNOAnimatedViewManager as {
 };
 const RNOAnimatedEventEmitter = new NativeEventEmitter(NativeModules.RNOAnimatedEventEmitter);
 
-export type SAnimatedPropertyName = 'translateX' | 'translateY' | 'opacity' | 'scale' | 'ios-width' | 'ios-height';
-export type SAnimatedPropertyAnimator = (name: string, property: SAnimatedPropertyName, from: number, to: number) => void;
+export type SAnimatedPropertyName = 'translateX' | 'translateY' | 'opacity' | 'scale' | 'ios-width' | 'ios-height' | 'backgroundColor';
+export type SAnimatedPropertyValue = number | string;
+export type SAnimatedPropertyAnimator = (name: string, property: SAnimatedPropertyName, from: SAnimatedPropertyValue, to: SAnimatedPropertyValue) => void;
 
 //
 // Timing
@@ -20,8 +21,8 @@ export type SAnimatedEasing = 'linear' | 'material' | { bezier: number[] };
 
 export interface SAnimatedTimingConfig {
     property: SAnimatedPropertyName;
-    from: number;
-    to: number;
+    from: SAnimatedPropertyValue;
+    to: SAnimatedPropertyValue;
     duration?: number;
     delay?: number;
     optional?: boolean;
@@ -34,6 +35,14 @@ export interface SAnimatedCircularConfig {
     duration?: number;
     centerX?: number;
     centerY?: number;
+}
+
+function resolveColor(property: SAnimatedPropertyName, value: SAnimatedPropertyValue) {
+    if (property === 'backgroundColor' && typeof value === 'string') {
+        return processColor(value);
+    } else {
+        return undefined;
+    }
 }
 
 function resolveEasing(easing?: SAnimatedEasing) {
@@ -56,8 +65,8 @@ function resolveEasing(easing?: SAnimatedEasing) {
 
 export interface SAnimatedSpringConfig {
     property: SAnimatedPropertyName;
-    from: number;
-    to: number;
+    from: SAnimatedPropertyValue;
+    to: SAnimatedPropertyValue;
     duration?: number;
     delay?: number;
     optional?: boolean;
@@ -79,7 +88,7 @@ class SAnimatedImpl {
     private _transactionDuration = 0.25;
     private _callbacks = new Map<string, (() => void)[]>();
     private _propertyAnimator?: SAnimatedPropertyAnimator;
-    private _dirtyProperties = new Map<string, Map<SAnimatedPropertyName, { from: number, to: number }>>();
+    private _dirtyProperties = new Map<string, Map<SAnimatedPropertyName, { from: SAnimatedPropertyValue, to: SAnimatedPropertyValue }>>();
     private _transactionKey?: string;
     private _knownComponents = new Map<string, Set<string>>();
     private _subscriptions = new Map<string, Map<string, (src: SAnimatedDynamic) => void>>();
@@ -109,7 +118,7 @@ class SAnimatedImpl {
         }
     }
 
-    onPropertyChanged = (property: SAnimatedProperty, oldValue: number) => {
+    onPropertyChanged = (property: SAnimatedProperty, oldValue: SAnimatedPropertyValue) => {
         if (!this._knownComponents.has(property.name)) {
             this._knownComponents.set(property.name, new Set());
         }
@@ -132,12 +141,13 @@ class SAnimatedImpl {
         }
     }
 
-    setValue = (name: string, property: SAnimatedPropertyName, value: number) => {
-        if (typeof value === 'number') {
+    setValue = (name: string, property: SAnimatedPropertyName, value: SAnimatedPropertyValue) => {
+        if (typeof value === 'number' || typeof value === 'string') {
             let v = {
                 view: name,
                 prop: property,
-                to: value
+                to: value,
+                toColor: resolveColor(property, value)
             };
             if (this._inTransaction) {
                 this._pendingSetters.push(v);
@@ -328,6 +338,8 @@ class SAnimatedImpl {
             prop: animation.property,
             from: animation.from,
             to: animation.to,
+            fromColor: resolveColor(animation.property, animation.from),
+            toColor: resolveColor(animation.property, animation.to),
             optional: animation.optional,
             duration: animation.duration,
             delay: animation.delay,
@@ -347,6 +359,8 @@ class SAnimatedImpl {
             prop: animation.property,
             from: animation.from,
             to: animation.to,
+            fromColor: resolveColor(animation.property, animation.from),
+            toColor: resolveColor(animation.property, animation.to),
             optional: animation.optional,
             velocity: animation.velocity,
             delay: animation.delay

@@ -122,6 +122,9 @@ class RNOAnimatedViewManager: RCTViewManager, RCTUIManagerObserver {
         } else if s.property == "ios-height" {
           view.layer.bounds.size.height = view.sourceSize.height + s.value
           view.currentHeightDelta = s.value
+        } else if s.property == "backgroundColor" && s.valueColor != nil {
+          view.layer.backgroundColor = s.valueColor!.cgColor
+          view.currentBackgroundColor = s.valueColor!
         } else {
           continue
         }
@@ -145,8 +148,10 @@ class RNOAnimatedViewManager: RCTViewManager, RCTUIManagerObserver {
           
           // Resolving Key Path
           let keyPath: String
-          let from: CGFloat
-          let to: CGFloat
+          var from: CGFloat?
+          var to: CGFloat?
+          var fromColor: UIColor?
+          var toColor: UIColor?
           var additive = true
           if s.property == "opacity" {
             keyPath = "opacity"
@@ -184,6 +189,12 @@ class RNOAnimatedViewManager: RCTViewManager, RCTUIManagerObserver {
             view.layer.bounds.size.height = view.sourceSize.height + s.to
             from = view.sourceSize.height + s.from
             to = view.sourceSize.height + s.to
+          }  else if (s.property == "backgroundColor" && s.toColor != nil && s.fromColor != nil) {
+            keyPath = "backgroundColor"
+            view.currentBackgroundColor = s.toColor!
+            view.layer.backgroundColor = s.toColor!.cgColor
+            fromColor = s.fromColor!
+            toColor = s.toColor!
           } else {
             continue
           }
@@ -211,13 +222,18 @@ class RNOAnimatedViewManager: RCTViewManager, RCTUIManagerObserver {
           }
           
           // Resolving values
-          animation.isAdditive = additive
-          if additive {
-            animation.fromValue = from - to
-            animation.toValue = 0
-          } else {
-            animation.fromValue = from
-            animation.toValue = to
+          if (keyPath == "backgroundColor" && fromColor != nil && toColor != nil) {
+            animation.fromValue = fromColor
+            animation.toValue = toColor
+          } else if (from != nil && to != nil) {
+            animation.isAdditive = additive
+            if additive {
+              animation.fromValue = from! - to!
+              animation.toValue = 0
+            } else {
+              animation.fromValue = from!
+              animation.toValue = to!
+            }
           }
           
           // Resolving parameters

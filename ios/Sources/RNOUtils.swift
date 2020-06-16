@@ -90,3 +90,16 @@ class WeakMap<V> {
     }
   }
 }
+
+func resolveColorR(_ rgbValue: UInt64) -> UIColor {  
+  // &  binary AND operator to zero out other color values
+  // >>  bitwise right shift operator
+  // Divide by 0xFF because UIColor takes CGFloats between 0.0 and 1.0
+  
+  let red =   CGFloat((rgbValue & 0xFF0000) >> 16) / 0xFF
+  let green = CGFloat((rgbValue & 0x00FF00) >> 8) / 0xFF
+  let blue =  CGFloat(rgbValue & 0x0000FF) / 0xFF
+  let alpha = CGFloat((rgbValue & 0xFF000000) >> 24) / 0xFF
+  
+  return UIColor(red: red, green: green, blue: blue, alpha: alpha)
+}
