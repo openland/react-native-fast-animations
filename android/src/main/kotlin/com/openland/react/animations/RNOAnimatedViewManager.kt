@@ -14,6 +14,7 @@ import com.facebook.react.uimanager.UIManagerModule
 import com.facebook.react.uimanager.UIManagerModuleListener
 import android.view.ViewAnimationUtils
 import android.animation.Animator
+import android.animation.ValueAnimator
 import android.annotation.SuppressLint
 import android.view.View
 import com.openland.react.animations.hacks.*
@@ -140,6 +141,9 @@ class RNOAnimatedViewManager(reactContext: ReactApplicationContext) : ReactConte
                     s.property == "translateY" -> {
                         view.translationY = PixelUtil.toPixelFromDIP(s.value)
                     }
+                    s.property == "backgroundColor" && s.valueColor != null -> {
+                        view.backgroundColor = s.valueColor as Int
+                    }
                 }
             }
         }
@@ -164,6 +168,9 @@ class RNOAnimatedViewManager(reactContext: ReactApplicationContext) : ReactConte
                         a.property == "translateY" -> {
                             view.translationY = PixelUtil.toPixelFromDIP(a.from)
                         }
+                        a.property == "backgroundColor" && a.fromColor != null -> {
+                            view.backgroundColor = a.fromColor as Int
+                        }
                     }
 
                     val duration = if (a.duration != null) {
@@ -182,29 +189,39 @@ class RNOAnimatedViewManager(reactContext: ReactApplicationContext) : ReactConte
                             LinearInterpolator()
                     }
 
-                    val rnAnim: Animator? = MakeAnimationsRenderThreadFast.fastAnimate(a.property, a.to, view)
-                    if (rnAnim != null) {
-                        rnAnim.duration = duration
-                        rnAnim.interpolator = inter
-                        rnAnim.start()
+                    if (a.property == "backgroundColor" && a.toColor != null) {
+                        val animator = ValueAnimator.ofArgb(a.fromColor as Int, a.toColor as Int)
+                        animator.duration = duration
+                        animator.interpolator = inter
+                        animator.addUpdateListener {
+                            view.backgroundColor = it.animatedValue as Int;
+                        }
+                        animator.start()
                     } else {
-                        val fAnim = MakeAnimationsFast.fastAnimate(view)
-                        fAnim.duration = duration
-                        fAnim.interpolator = inter
+                        val rnAnim: Animator? = MakeAnimationsRenderThreadFast.fastAnimate(a.property, a.to, view)
+                        if (rnAnim != null) {
+                            rnAnim.duration = duration
+                            rnAnim.interpolator = inter
+                            rnAnim.start()
+                        } else {
+                            val fAnim = MakeAnimationsFast.fastAnimate(view)
+                            fAnim.duration = duration
+                            fAnim.interpolator = inter
 
-                        when {
-                            a.property == "opacity" -> {
-                                fAnim.alpha(a.to)
-                            }
-                            a.property == "scale" -> {
-                                fAnim.scaleX(a.to)
-                                fAnim.scaleY(a.to)
-                            }
-                            a.property == "translateX" -> {
-                                fAnim.translationX(PixelUtil.toPixelFromDIP(a.to))
-                            }
-                            a.property == "translateY" -> {
-                                fAnim.translationY(PixelUtil.toPixelFromDIP(a.to))
+                            when {
+                                a.property == "opacity" -> {
+                                    fAnim.alpha(a.to)
+                                }
+                                a.property == "scale" -> {
+                                    fAnim.scaleX(a.to)
+                                    fAnim.scaleY(a.to)
+                                }
+                                a.property == "translateX" -> {
+                                    fAnim.translationX(PixelUtil.toPixelFromDIP(a.to))
+                                }
+                                a.property == "translateY" -> {
+                                    fAnim.translationY(PixelUtil.toPixelFromDIP(a.to))
+                                }
                             }
                         }
                     }

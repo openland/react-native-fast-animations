@@ -35,6 +35,8 @@ class RNOAnimationSpec {
     var property: String = ""
     var to: Float = 0.0f
     var from: Float = 0.0f
+    var toColor: Int? = null
+    var fromColor: Int? = null
 
     var centerX: Float = 0.0f
     var centerY: Float = 0.0f
@@ -47,6 +49,7 @@ class RNOValueSet {
     var viewKey: String = ""
     var property: String = ""
     var value: Float = 0.0f
+    var valueColor: Int? = null
     var optional: Boolean = false
 }
 
@@ -73,8 +76,22 @@ fun parseAnimationSpec(spec: String): RNOAnimationTransactionSpec {
         }
 
         aspec.viewKey = anim["view"] as String
-        aspec.to = (anim["to"] as Number).toFloat()
-        aspec.from = (anim["from"] as Number).toFloat()
+
+        if (anim["to"] is Number) {
+            aspec.to = (anim["to"] as Number).toFloat()
+        }
+
+        if (anim["from"] is Number) {
+            aspec.from = (anim["from"] as Number).toFloat()
+        }
+
+        if (anim["toColor"] is Number) {
+            aspec.toColor = (anim["toColor"] as Number).toInt()
+        }
+
+        if (anim["fromColor"] is Number) {
+            aspec.fromColor = (anim["fromColor"] as Number).toInt()
+        }
 
         // Property
         if (aspec.type != RNOAnimationType.circular) {
@@ -114,7 +131,15 @@ fun parseAnimationSpec(spec: String): RNOAnimationTransactionSpec {
         val aspec = RNOValueSet()
         aspec.viewKey = setter["view"] as String
         aspec.property = setter["prop"] as String
-        aspec.value = (setter["to"] as Number).toFloat()
+
+        if (setter["to"] is Number) {
+            aspec.value = (setter["to"] as Number).toFloat()
+        }
+
+        if (setter["toColor"] is Number) {
+            aspec.valueColor = (setter["toColor"] as Number).toInt()
+        }
+
         if (setter["optional"] is Boolean) {
             aspec.optional = setter["optional"] as Boolean
         }
