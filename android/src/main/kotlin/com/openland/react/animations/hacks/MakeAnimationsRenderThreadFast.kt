@@ -19,7 +19,7 @@ object MakeAnimationsRenderThreadFast {
 
     init {
         try {
-            val rnAnimator = MakeAnimationsFast::class.java.classLoader.loadClass("android.view.RenderNodeAnimator")
+            val rnAnimator = MakeAnimationsFast::class.java.classLoader!!.loadClass("android.view.RenderNodeAnimator")
             rnAnimatorConstructor = rnAnimator.getConstructor(Int::class.java, Float::class.java)
             setter = rnAnimator.getDeclaredMethod("setTarget", View::class.java)
 

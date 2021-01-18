@@ -17,7 +17,7 @@ object MakeAnimationsFast {
         try {
             backendField = ViewPropertyAnimator::class.java.declaredFields.find { it.name === "mRTBackend" }!!
             backendField!!.isAccessible = true
-            animatorClazz = MakeAnimationsFast::class.java.classLoader.loadClass("android.view.ViewPropertyAnimatorRT")
+            animatorClazz = MakeAnimationsFast::class.java.classLoader!!.loadClass("android.view.ViewPropertyAnimatorRT")
             if (animatorClazz!!.declaredConstructors.size != 1) {
                 throw Exception("Unexpected number of constructors in ViewPropertyAnimatorRT")
             }
