@@ -32,7 +32,7 @@ class RNOAnimatedViewManager(reactContext: ReactApplicationContext) : ReactConte
         super.initialize()
         // Subscribe for mount events to catch right time to start animation
         val uiManager = reactApplicationContext.getNativeModule(UIManagerModule::class.java)
-        uiManager.addUIManagerListener(this)
+        uiManager?.addUIManagerListener(this)
 
         // Register in view view manager
         RNOAnimatedViewViewManager.sharedInstance.registerViewManager(this)
